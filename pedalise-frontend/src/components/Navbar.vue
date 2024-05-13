@@ -1,55 +1,27 @@
 <script setup>
-
 </script>
 
 <template>
-  <nav class="navbar">
-    <RouterLink to="/" class="navbar-logo">
-      <img alt="Vue logo" class="logo" src="@/assets/pedalise-logo.png" height="50" />
-    </RouterLink>
+  <v-app>
+    <v-app-bar app dense>
+      <!-- Logo and home link -->
+      <v-toolbar-title>
+        <router-link to="/">
+          <v-img src="../assets/pedalise-logo.png" contain height="50" alt="Pedalise Logo" class="logo-image"></v-img>
+        </router-link>
+      </v-toolbar-title>
 
-    <div class="navbar-links">
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/agenda">Agenda</RouterLink>
-    </div>
-  </nav>
+      <v-spacer></v-spacer>
+
+      <!-- Navigation links -->
+      <v-btn text to="/">Home</v-btn>
+      <v-btn text to="/agenda">Agenda</v-btn>
+    </v-app-bar>
+  </v-app>
 </template>
 
 <style scoped>
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  color: white;
-  position: fixed;
-  top: 15px;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  height: 80px;
-}
-
-.navbar-logo img {
-  height: 70px;
-}
-
-.navbar-links {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  font-size: 1.5rem;
-  width: 100%;
-}
-
-a {
-  margin: 0 30px;
-  text-decoration: none;
-  color: #3ac1d7;
-  transition: 0.4s;
-}
-
-.router-link-active {
-  font-weight: bold;
+.logo-image {
+  margin-left: -30%; /* Adjust this value as needed */
 }
 </style>
