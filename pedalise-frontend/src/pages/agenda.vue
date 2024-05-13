@@ -1,14 +1,11 @@
 <template>
-  <v-app>
-    <v-content>
-      <Calendar/>
-    </v-content>
-  </v-app>
+  <usage></usage>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-import Calendar from '@/components/Calendar.vue'
+import Usage from '@/components/v-calendar/usage.vue'
+
 </script>
 
 <style scoped>
