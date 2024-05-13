@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-sheet class="d-flex" height="54" tile>
       <v-select
         v-model="type"
         :items="types"
@@ -19,7 +18,6 @@
         dense
         hide-details
       ></v-select>
-    </v-sheet>
     <v-sheet>
       <v-calendar
         ref="calendar"
