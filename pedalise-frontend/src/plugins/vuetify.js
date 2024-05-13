@@ -1,22 +1,19 @@
-/**
- * plugins/vuetify.js
- *
- * Framework documentation: https://vuetifyjs.com`
- */
+// plugins/vuetify.js
 
 // Styles
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
-// Composables
+// Vuetify
 import { createVuetify } from 'vuetify'
+import * as directives from 'vuetify/directives'
 import { VCalendar } from 'vuetify/labs/components'
 
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   components: {
     VCalendar,
   },
+  directives,
   theme: {
     defaultTheme: 'dark',
   },
