@@ -1,4 +1,4 @@
-package br.com.pedalise.pedalisebackend.entity;
+package br.com.pedalise.pedalisebackend.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String name;
+    private String username;
 
     private String password;
 
