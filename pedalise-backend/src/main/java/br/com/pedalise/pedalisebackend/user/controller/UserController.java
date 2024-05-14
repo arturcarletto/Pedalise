@@ -1,7 +1,7 @@
-package br.com.pedalise.pedalisebackend.controller;
+package br.com.pedalise.pedalisebackend.user.controller;
 
-import br.com.pedalise.pedalisebackend.entity.User;
-import br.com.pedalise.pedalisebackend.service.UserService;
+import br.com.pedalise.pedalisebackend.user.entity.User;
+import br.com.pedalise.pedalisebackend.user.service.UserService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

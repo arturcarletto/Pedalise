@@ -1,4 +1,4 @@
-package br.com.pedalise.pedalisebackend.exception;
+package br.com.pedalise.pedalisebackend.user.exception;
 
 public class InvalidUserException extends RuntimeException {
 

@@ -1,15 +1,11 @@
-package br.com.pedalise.pedalisebackend.service.Impl;
+package br.com.pedalise.pedalisebackend.user.service.impl;
 
-import br.com.pedalise.pedalisebackend.entity.User;
-import br.com.pedalise.pedalisebackend.exception.InvalidUserException;
-import br.com.pedalise.pedalisebackend.repository.UserRepository;
-import br.com.pedalise.pedalisebackend.service.UserService;
+import br.com.pedalise.pedalisebackend.user.entity.User;
+import br.com.pedalise.pedalisebackend.user.repository.UserRepository;
+import br.com.pedalise.pedalisebackend.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,23 +17,23 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User create(@NotNull User user) {
+    public User create(User user) {
         return userRepository.save(user);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return null;
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     @Override
     public User getUserByUsername(String username) {
-        return null;
+        return userRepository.findByUsername(username).orElse(null);
     }
 
     @Override
     public User getUserById(UUID id) {
-        return null;
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
