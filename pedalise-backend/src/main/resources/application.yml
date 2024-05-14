@@ -1,6 +1,6 @@
 spring:
   application:
-    name: pedalise-backend
+    name: Pedalise
 
   profiles:
     active: test
@@ -24,3 +24,7 @@ spring:
   docker:
     compose:
       file: compose.yaml
+
+cors:
+  allowed-origins:
+    - 'http://localhost:8080'
