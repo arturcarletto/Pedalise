@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,9 +22,9 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private Date eventDate;
+    private ZonedDateTime eventDate;
 
-    private Date postDate;
+    private ZonedDateTime postDate;
 
     private String title;
 
