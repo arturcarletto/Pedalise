@@ -1,5 +1,6 @@
 <template>
   <v-app-bar app dense>
+
     <!-- Logo and home link -->
     <v-toolbar-title>
       <router-link to="/">
@@ -7,7 +8,9 @@
       </router-link>
     </v-toolbar-title>
 
-    <v-spacer></v-spacer>
+    <v-spacer>
+
+    </v-spacer>
 
     <!-- Navigation links -->
     <v-btn text to="/">Home</v-btn>

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -33,12 +34,12 @@ public class EventController {
     }
 
     @GetMapping("/postDate/{postDate}")
-    public ResponseEntity<List<Event>> findEventByPostDate(@PathVariable Date postDate) {
+    public ResponseEntity<List<Event>> findEventByPostDate(@PathVariable ZonedDateTime postDate) {
         return ResponseEntity.ok(eventService.findEventByPostDate(postDate));
     }
 
     @GetMapping("/date/{eventDate}")
-    public ResponseEntity<List<Event>> findEventByEventDate(@PathVariable Date eventDate) {
+    public ResponseEntity<List<Event>> findEventByEventDate(@PathVariable ZonedDateTime eventDate) {
         return ResponseEntity.ok(eventService.findEventByEventDate(eventDate));
     }
 

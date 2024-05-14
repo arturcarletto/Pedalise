@@ -7,6 +7,7 @@ import br.com.pedalise.pedalisebackend.event.service.EventService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -19,19 +20,16 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event create(Event event) {
-        if(event.getId() != null){
-            System.out.println("o id do Event deve ser null");
-        }
         return eventRepository.save(event);
     }
 
     @Override
-    public List<Event> findEventByPostDate(Date date) {
+    public List<Event> findEventByPostDate(ZonedDateTime date) {
         return eventRepository.findByPostDate(date).orElse(null);
     }
 
     @Override
-    public List<Event> findEventByEventDate(Date date) {
+    public List<Event> findEventByEventDate(ZonedDateTime date) {
         return eventRepository.findByEventDate(date).orElse(null);
     }
 
