@@ -2,7 +2,6 @@ package br.com.pedalise.pedalisebackend.event.repository;
 
 import br.com.pedalise.pedalisebackend.event.entity.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 
 import java.time.ZonedDateTime;
 import java.util.List;

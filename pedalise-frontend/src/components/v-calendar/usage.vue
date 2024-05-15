@@ -8,13 +8,14 @@
         </v-card-title>
         <v-card-text>
           <v-text-field v-model="newEvent.name" label="Event Name" outlined></v-text-field>
-          <v-text-field v-model="newEvent.start_date" label="Start Date" type="date" outlined></v-text-field>
-          <v-text-field v-model="newEvent.end_date" label="End Date" type="date" outlined></v-text-field>
+          <v-text-field v-model="newEvent.startDate" label="Start Date" type="date" outlined></v-text-field>
+          <v-text-field v-model="newEvent.endDate" label="End Date" type="date" outlined></v-text-field>
+          <v-text-field v-model="newEvent.content" label="Content" outlined></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-          <v-btn color="blue darken-1" text @click="addEvent">Save</v-btn>
+          <v-btn color="blue darken-1"  @click="closeDialog">Cancel</v-btn>
+          <v-btn color="blue darken-1"  @click="addEvent">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -55,9 +56,10 @@ export default {
   data: () => ({
     events: [],
     newEvent: {
-      name: '',
-      start_date: new Date().toISOString().substr(0, 10),
-      end_date: new Date().toISOString().substr(0, 10)
+      title: '',
+      startDate: new Date().toISOString().substr(0, 10),
+      endDate: new Date().toISOString().substr(0, 10),
+      content: ''
     },
     dialog: false,
     type: 'month',
@@ -83,14 +85,14 @@ export default {
             console.log('Raw event:', event);
 
             // Validate and parse dates
-            if (!event.start_date || !event.end_date) {
+            if (!event.startDate || !event.endDate) {
               console.error('Event has invalid dates:', event);
               return null;
             }
 
             try {
-              const start = new Date(event.start_date).toISOString();
-              const end = new Date(event.end_date).toISOString();
+              const start = new Date(event.startDate).toUTCString();
+              const end = new Date(event.endDate).toUTCString();
               return {
                 name: event.name,
                 start: start,
@@ -108,25 +110,27 @@ export default {
         });
     },
     addEvent() {
-      console.log('Start Date:', this.newEvent.start_date);
-      console.log('End Date:', this.newEvent.end_date);
+      console.log('Start Date:', this.newEvent.startDate);
+      console.log('End Date:', this.newEvent.endDate);
 
       const newEvent = {
-        name: this.newEvent.name,
-        start_date: new Date(this.newEvent.start_date).toISOString(),
-        end_date: new Date(this.newEvent.end_date).toISOString(),
+        title: this.newEvent.name,
+        startDate: new Date(this.newEvent.startDate).toISOString(),
+        endDate: new Date(this.newEvent.endDate).toISOString(),
+        content: this.newEvent.content,
         color: 'blue'
       };
 
-      console.log('Formatted Start Date:', newEvent.start_date);
-      console.log('Formatted End Date:', newEvent.end_date);
+      console.log('Formatted Start Date:', newEvent.startDate);
+      console.log('Formatted End Date:', newEvent.endDate);
 
       // Add the event locally
       this.events.push(newEvent);
 
       // Post the new event to the server
-      HttpService.post('http://localhost:8080/api/v1/events', newEvent)
+      HttpService.post('/api/v1/events', newEvent)
         .then(response => {
+          console.log(newEvent)
           console.log('Event added:', response.data);
           this.resetForm();
           this.closeDialog();
@@ -136,9 +140,10 @@ export default {
         });
     },
     resetForm() {
-      this.newEvent.name = '';
-      this.newEvent.start_date = new Date().toISOString().substr(0, 10);
-      this.newEvent.end_date = new Date().toISOString().substr(0, 10);
+      this.newEvent.title = '';
+      this.newEvent.startDate = new Date().toISOString().substr(0, 10);
+      this.newEvent.endDate = new Date().toISOString().substr(0, 10);
+      this.newEvent.content = ''
     },
     openAddEventDialog() {
       this.dialog = true;

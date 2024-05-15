@@ -4,12 +4,10 @@ import br.com.pedalise.pedalisebackend.event.entity.Event;
 import br.com.pedalise.pedalisebackend.event.exception.EventNotFoundException;
 import br.com.pedalise.pedalisebackend.event.repository.EventRepository;
 import br.com.pedalise.pedalisebackend.event.service.EventService;
-import br.com.pedalise.pedalisebackend.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,11 +48,6 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAll() {
-        return eventRepository.findAll();
-    }
-
-    @Override
     public Event deleteById(UUID id) {
         return eventRepository.findById(id).map(event -> {
             eventRepository.deleteById(id);
@@ -70,8 +63,12 @@ public class EventServiceImpl implements EventService {
         actualEvent.setEndDate(editedEvent.getEndDate());
         actualEvent.setContent(editedEvent.getContent());
         actualEvent.setTitle(editedEvent.getTitle());
-        actualEvent.setColor(editedEvent.getColor());
 
         return eventRepository.save(actualEvent);
+    }
+
+    @Override
+    public List<Event> getAll() {
+        return eventRepository.findAll();
     }
 }
