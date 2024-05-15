@@ -6,7 +6,6 @@ const apiBaseUrl = import.meta.env.VITE_API_URL;
 class HttpService{
 
   constructor() {
-      console.log('apiBaseUrl:', apiBaseUrl);
       this.axios = Axios.create({
         baseURL: apiBaseUrl,
         headers: {
@@ -21,6 +20,8 @@ class HttpService{
     }
 
     async post(endpoint, data) {
+      console.log(data)
+      console.log(endpoint)
       return this.axios.post(endpoint, data);
     }
 

@@ -4,6 +4,7 @@ import br.com.pedalise.pedalisebackend.event.entity.Event;
 import br.com.pedalise.pedalisebackend.event.exception.EventNotFoundException;
 import br.com.pedalise.pedalisebackend.event.repository.EventRepository;
 import br.com.pedalise.pedalisebackend.event.service.EventService;
+import br.com.pedalise.pedalisebackend.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Event create(Event event) {
@@ -50,7 +52,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findAll() {
-        return List.of();
+        return eventRepository.findAll();
     }
 
     @Override
