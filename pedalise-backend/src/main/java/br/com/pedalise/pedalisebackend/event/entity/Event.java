@@ -22,14 +22,17 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private ZonedDateTime eventDate;
+    private ZonedDateTime startDate;
 
-    private ZonedDateTime postDate;
+    private ZonedDateTime endDate;
 
     private String title;
 
     private String content;
 
     private UUID authorId;
+
+    private String color;
+
 
 }

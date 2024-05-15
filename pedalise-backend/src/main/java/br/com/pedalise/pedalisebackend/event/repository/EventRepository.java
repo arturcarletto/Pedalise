@@ -15,8 +15,10 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     Optional<List<Event>> findByAuthorId(UUID authorId);
 
-    Optional<List<Event>> findByPostDate(ZonedDateTime postDate);
+    Optional<List<Event>> findByStartDate(ZonedDateTime startDate);
 
-    Optional<List<Event>> findByEventDate(ZonedDateTime eventDate);
+    Optional<List<Event>> findByEndDate(ZonedDateTime endDate);
+
+    Optional<List<Event>> findByColor(String color);
 
 }

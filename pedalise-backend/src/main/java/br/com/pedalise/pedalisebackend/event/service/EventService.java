@@ -12,9 +12,9 @@ public interface EventService {
 
     Event create(@NotNull Event event);
 
-    List<Event> findEventByPostDate(@NotNull ZonedDateTime date);
+    List<Event> findEventByStartDate(@NotNull ZonedDateTime date);
 
-    List<Event> findEventByEventDate(@NotNull ZonedDateTime date);
+    List<Event> findEventByEndDate(@NotNull ZonedDateTime date);
 
     List<Event> findEventByTitle(@NotNull String title);
 
@@ -26,6 +26,6 @@ public interface EventService {
 
     Event updateEvent(UUID id, @NotNull Event event);
 
-    List<Event> findAll();
+    List<Event> getAll();
 
 }

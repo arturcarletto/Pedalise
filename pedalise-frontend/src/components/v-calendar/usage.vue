@@ -8,8 +8,8 @@
         </v-card-title>
         <v-card-text>
           <v-text-field v-model="newEvent.name" label="Event Name" outlined></v-text-field>
-          <v-text-field v-model="newEvent.start" label="Start Date" type="date" outlined></v-text-field>
-          <v-text-field v-model="newEvent.end" label="End Date" type="date" outlined></v-text-field>
+          <v-text-field v-model="newEvent.start_date" label="Start Date" type="date" outlined></v-text-field>
+          <v-text-field v-model="newEvent.end_date" label="End Date" type="date" outlined></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -18,62 +18,48 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
-  <div>
-      <v-select
-        v-model="type"
-        :items="types"
-        class="ma-2"
-        label="View Mode"
-        variant="outlined"
-        dense
-        hide-details
-      ></v-select>
-      <v-select
-        v-model="weekday"
-        :items="weekdays"
-        class="ma-2"
-        label="weekdays"
-        variant="outlined"
-        dense
-        hide-details
-      ></v-select>
+    <v-select
+      v-model="type"
+      :items="types"
+      class="ma-2"
+      label="View Mode"
+      variant="outlined"
+      dense
+      hide-details
+    ></v-select>
+    <v-select
+      v-model="weekday"
+      :items="weekdays"
+      class="ma-2"
+      label="Weekdays"
+      variant="outlined"
+      dense
+      hide-details
+    ></v-select>
     <v-sheet>
       <v-calendar
         ref="calendar"
-        v-model="value"
+        v-model:focus="focus"
         :events="events"
-        :view-mode="type"
-        :weekdays="weekday"
+        :type="type"
+        color="primary"
       ></v-calendar>
     </v-sheet>
-  </div>
+  </v-container>
 </template>
 
 <script>
-import { useDate } from 'vuetify'
-import httpService from '@/api/HttpService'
-import axios from 'axios'
-
-const loading = ref(false)
-
-const events = ref([])
-
-const fetchEvents = async () => {
-  httpService.get('api/v1/events/').then(response => {
-    loading.value = true
-    events.value = response.data;
-    loading.value = false
-  }).catch(error => {
-    console.error('Erro ao buscar eventos:', error);
-    loading.value = false;
-  });
-};
-
-onMounted(fetchEvents)
+import HttpService from '@/api/HttpService'
 
 export default {
   data: () => ({
+    events: [],
+    newEvent: {
+      name: '',
+      start_date: new Date().toISOString().substr(0, 10),
+      end_date: new Date().toISOString().substr(0, 10)
+    },
+    dialog: false,
     type: 'month',
     types: ['month', 'week', 'day'],
     weekday: [0, 1, 2, 3, 4, 5, 6],
@@ -83,105 +69,83 @@ export default {
       { title: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
       { title: 'Mon, Wed, Fri', value: [1, 3, 5] },
     ],
-    events: [],
-    colors: [
-      'blue',
-      'indigo',
-      'deep-purple',
-      'cyan',
-      'green',
-      'orange',
-      'grey darken-1',
-    ],
-    titles: [
-      'Meeting',
-      'Holiday',
-      'PTO',
-      'Travel',
-      'Event',
-      'Birthday',
-      'Conference',
-      'Party',
-    ],
-    dialog: false,
-    value: new Date(),
-    newEvent: {
-      name: '',
-      start: '',
-      end: ''
-    }
+    focus: new Date().toISOString().substr(0, 10) // Initialize with today's date
   }),
   mounted() {
-    const adapter = useDate()
-    this.getEvents({
-      start: adapter.startOfDay(adapter.startOfMonth(new Date())),
-      end: adapter.endOfDay(adapter.endOfMonth(new Date())),
-    })
+    this.fetchEvents();
   },
   methods: {
-    getEvents({ start, end }) {
-      const events = []
+    fetchEvents() {
+      HttpService.get('http://localhost:8080/api/v1/events')
+        .then(response => {
+          console.log('Fetched events:', response.data);
+          this.events = response.data.map(event => {
+            console.log('Raw event:', event);
 
-      const min = start
-      const max = end
-      const days = (max.getTime() - min.getTime()) / 86400000
-      const eventCount = this.rnd(days, days + 20)
+            // Validate and parse dates
+            if (!event.start_date || !event.end_date) {
+              console.error('Event has invalid dates:', event);
+              return null;
+            }
 
-      for (let i = 0; i < eventCount; i++) {
-        const allDay = this.rnd(0, 3) === 0
-        const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-        const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-        const second = new Date(first.getTime() + secondTimestamp)
-
-        events.push({
-          title: this.titles[this.rnd(0, this.titles.length - 1)],
-          start: first,
-          end: second,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
-          allDay: !allDay,
+            try {
+              const start = new Date(event.start_date).toISOString();
+              const end = new Date(event.end_date).toISOString();
+              return {
+                name: event.name,
+                start: start,
+                end: end,
+                color: event.color,
+              };
+            } catch (error) {
+              console.error('Error parsing dates:', error);
+              return null;
+            }
+          }).filter(event => event !== null);
         })
-      }
+        .catch(error => {
+          console.error('Error fetching events:', error);
+        });
+    },
+    addEvent() {
+      console.log('Start Date:', this.newEvent.start_date);
+      console.log('End Date:', this.newEvent.end_date);
 
-      this.events = events
+      const newEvent = {
+        name: this.newEvent.name,
+        start_date: new Date(this.newEvent.start_date).toISOString(),
+        end_date: new Date(this.newEvent.end_date).toISOString(),
+        color: 'blue'
+      };
+
+      console.log('Formatted Start Date:', newEvent.start_date);
+      console.log('Formatted End Date:', newEvent.end_date);
+
+      // Add the event locally
+      this.events.push(newEvent);
+
+      // Post the new event to the server
+      HttpService.post('http://localhost:8080/api/v1/events', newEvent)
+        .then(response => {
+          console.log('Event added:', response.data);
+          this.resetForm();
+          this.closeDialog();
+        })
+        .catch(error => {
+          console.error('Error adding event:', error);
+        });
     },
-    getEventColor(event) {
-      return event.color
-    },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a
+    resetForm() {
+      this.newEvent.name = '';
+      this.newEvent.start_date = new Date().toISOString().substr(0, 10);
+      this.newEvent.end_date = new Date().toISOString().substr(0, 10);
     },
     openAddEventDialog() {
       this.dialog = true;
     },
     closeDialog() {
       this.dialog = false;
-    },
-    addEvent() {
-      const eventToAdd = {
-        ...this.newEvent,
-        color: 'blue' // default color or could be selected by the user
-      };
-      this.events.push(eventToAdd);
-      this.saveEvent(eventToAdd);
-      this.closeDialog();
-      this.resetNewEvent();
-    },
-    resetNewEvent() {
-      this.newEvent = { name: '', start: '', end: '' };
-    },
-    saveEvent(event) {
-      // API call to save the event
-      axios.post('/api/events', event)
-        .then(response => {
-          // Handle response here
-          console.log('Event added:', response.data);
-        })
-        .catch(error => {
-          console.error('There was an error adding the event:', error);
-        });
     }
-
-  },
-}
+  }
+};
 </script>

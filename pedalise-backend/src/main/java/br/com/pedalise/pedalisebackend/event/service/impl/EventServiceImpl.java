@@ -18,7 +18,6 @@ import java.util.UUID;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
 
     @Override
     public Event create(Event event) {
@@ -26,13 +25,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findEventByPostDate(ZonedDateTime date) {
-        return eventRepository.findByPostDate(date).orElse(null);
+    public List<Event> findEventByStartDate(ZonedDateTime date) {
+        return eventRepository.findByStartDate(date).orElse(null);
     }
 
     @Override
-    public List<Event> findEventByEventDate(ZonedDateTime date) {
-        return eventRepository.findByEventDate(date).orElse(null);
+    public List<Event> findEventByEndDate(ZonedDateTime date) {
+        return eventRepository.findByEndDate(date).orElse(null);
     }
 
     @Override
@@ -51,7 +50,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAll() {
+    public List<Event> getAll() {
         return eventRepository.findAll();
     }
 
@@ -67,9 +66,11 @@ public class EventServiceImpl implements EventService {
     public Event updateEvent(UUID id, Event editedEvent) {
         var actualEvent = eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException("Evento não encontrado: " + id));
 
-        actualEvent.setEventDate(editedEvent.getEventDate());
+        actualEvent.setStartDate(editedEvent.getStartDate());
+        actualEvent.setEndDate(editedEvent.getEndDate());
         actualEvent.setContent(editedEvent.getContent());
         actualEvent.setTitle(editedEvent.getTitle());
+        actualEvent.setColor(editedEvent.getColor());
 
         return eventRepository.save(actualEvent);
     }

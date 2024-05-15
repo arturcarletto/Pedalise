@@ -23,9 +23,9 @@ public class EventController {
         return ResponseEntity.ok(eventService.create(event));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Event>> findAll() {
-        return ResponseEntity.ok(eventService.findAll());
+        return ResponseEntity.ok(eventService.getAll());
     }
 
     @GetMapping("/{id}")
@@ -33,14 +33,14 @@ public class EventController {
         return ResponseEntity.ok(eventService.findEventById(id));
     }
 
-    @GetMapping("/postDate/{postDate}")
-    public ResponseEntity<List<Event>> findEventByPostDate(@PathVariable ZonedDateTime postDate) {
-        return ResponseEntity.ok(eventService.findEventByPostDate(postDate));
+    @GetMapping("/startDate/{startDate}")
+    public ResponseEntity<List<Event>> findEventByStartDate(@PathVariable ZonedDateTime startDate) {
+        return ResponseEntity.ok(eventService.findEventByStartDate(startDate));
     }
 
-    @GetMapping("/date/{eventDate}")
-    public ResponseEntity<List<Event>> findEventByEventDate(@PathVariable ZonedDateTime eventDate) {
-        return ResponseEntity.ok(eventService.findEventByEventDate(eventDate));
+    @GetMapping("/endDate/{endDate}")
+    public ResponseEntity<List<Event>> findEventByEndDate(@PathVariable ZonedDateTime endDate) {
+        return ResponseEntity.ok(eventService.findEventByEndDate(endDate));
     }
 
     @GetMapping("/content/{title}")
