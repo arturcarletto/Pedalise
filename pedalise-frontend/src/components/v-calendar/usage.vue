@@ -71,7 +71,7 @@ export default {
       { title: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
       { title: 'Mon, Wed, Fri', value: [1, 3, 5] },
     ],
-    focus: new Date().toISOString().substr(0, 10) // Initialize with today's date
+    focus: new Date().toUTCString().substr(0, 10) // Initialize with today's date
   }),
   mounted() {
     this.fetchEvents();
@@ -115,8 +115,8 @@ export default {
 
       const newEvent = {
         title: this.newEvent.name,
-        startDate: new Date(this.newEvent.startDate).toISOString(),
-        endDate: new Date(this.newEvent.endDate).toISOString(),
+        startDate: new Date(this.newEvent.startDate).toUTCString(),
+        endDate: new Date(this.newEvent.endDate).toUTCString(),
         content: this.newEvent.content,
         color: 'blue'
       };
@@ -141,8 +141,8 @@ export default {
     },
     resetForm() {
       this.newEvent.title = '';
-      this.newEvent.startDate = new Date().toISOString().substr(0, 10);
-      this.newEvent.endDate = new Date().toISOString().substr(0, 10);
+      this.newEvent.startDate = new Date().toUTCString().substr(0, 10);
+      this.newEvent.endDate = new Date().toUTCString().substr(0, 10);
       this.newEvent.content = ''
     },
     openAddEventDialog() {

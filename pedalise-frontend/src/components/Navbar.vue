@@ -15,6 +15,7 @@
     <!-- Navigation links -->
     <v-btn text to="/">Home</v-btn>
     <v-btn text to="/agenda">Agenda</v-btn>
+    <v-btn text to="/register">Register</v-btn>
   </v-app-bar>
 </template>
 
