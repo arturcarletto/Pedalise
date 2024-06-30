@@ -11,6 +11,7 @@
     "axios": "^1.6.8",
     "axios-auth-refresh": "^3.3.6",
     "core-js": "^3.34.0",
+    "date-fns": "^3.6.0",
     "roboto-fontface": "*",
     "vue": "^3.4.0",
     "vuetify": "^3.5.0"

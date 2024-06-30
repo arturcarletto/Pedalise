@@ -7,36 +7,151 @@
           <span class="text-h5">Add New Event</span>
         </v-card-title>
         <v-card-text>
-          <v-text-field v-model="newEvent.name" label="Event Name" outlined></v-text-field>
-          <v-text-field v-model="newEvent.startDate" label="Start Date" type="date" outlined></v-text-field>
-          <v-text-field v-model="newEvent.endDate" label="End Date" type="date" outlined></v-text-field>
-          <v-text-field v-model="newEvent.content" label="Content" outlined></v-text-field>
+          <v-form ref="form">
+            <v-text-field v-model="newEvent.title" label="Event title" outlined :rules="[v => !!v || 'Title is required']"></v-text-field>
+            <v-row>
+              <v-col>
+                <v-menu
+                  ref="startDateMenu"
+                  v-model="startDateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="newEvent.startDate"
+                      label="Start Date"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      outlined
+                      v-bind="attrs"
+                      @click="startDateMenu = true"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="newEvent.startDate" @input="startDateMenu = false"></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col>
+                <v-menu
+                  ref="startTimeMenu"
+                  v-model="startTimeMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="newEvent.startTime"
+                      label="Start Time"
+                      prepend-icon="mdi-clock"
+                      readonly
+                      outlined
+                      v-bind="attrs"
+                      @click="startTimeMenu = true"
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker v-model="newEvent.startTime" @click:minute="startTimeMenu = false"></v-time-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-menu
+                  ref="endDateMenu"
+                  v-model="endDateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="newEvent.endDate"
+                      label="End Date"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      outlined
+                      v-bind="attrs"
+                      @click="endDateMenu = true"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="newEvent.endDate" @input="endDateMenu = false"></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col>
+                <v-menu
+                  ref="endTimeMenu"
+                  v-model="endTimeMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="newEvent.endTime"
+                      label="End Time"
+                      prepend-icon="mdi-clock"
+                      readonly
+                      outlined
+                      v-bind="attrs"
+                      @click="endTimeMenu = true"
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker v-model="newEvent.endTime" @click:minute="endTimeMenu = false"></v-time-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+            <v-text-field v-model="newEvent.content" label="Content" outlined></v-text-field>
+
+            <!-- Color Picker -->
+            <v-row>
+              <v-col>
+                <v-text-field v-model="newEvent.color" label="Event Color" outlined readonly></v-text-field>
+              </v-col>
+              <v-col>
+                <v-btn icon @click="openColorPicker">
+                  <v-icon :color="newEvent.color">mdi-palette</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+
+            <!-- Suggested Colors -->
+            <v-row>
+              <v-col v-for="color in colorOptions" :key="color" class="d-flex justify-center">
+                <v-icon
+                  :color="color"
+                  @click="newEvent.color = color"
+                  class="hoverable"
+                  style="cursor: pointer;"
+                >
+                  mdi-circle
+                </v-icon>
+              </v-col>
+            </v-row>
+          </v-form>
+
+          <!-- Color Picker Dialog -->
+          <v-dialog v-model="colorPickerDialog" persistent max-width="400px">
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">Pick a Color</span>
+              </v-card-title>
+              <v-card-text>
+                <v-color-picker v-model="newEvent.color" flat hide-canvas></v-color-picker>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn text @click="colorPickerDialog = false">Close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1"  @click="closeDialog">Cancel</v-btn>
-          <v-btn color="blue darken-1"  @click="addEvent">Save</v-btn>
+          <v-btn color="blue darken-1" @click="closeDialog">Cancel</v-btn>
+          <v-btn color="blue darken-1" @click="addEvent">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-select
-      v-model="type"
-      :items="types"
-      class="ma-2"
-      label="View Mode"
-      variant="outlined"
-      dense
-      hide-details
-    ></v-select>
-    <v-select
-      v-model="weekday"
-      :items="weekdays"
-      class="ma-2"
-      label="Weekdays"
-      variant="outlined"
-      dense
-      hide-details
-    ></v-select>
     <v-sheet>
       <v-calendar
         ref="calendar"
@@ -44,24 +159,36 @@
         :events="events"
         :type="type"
         color="primary"
+        :event-color="getEventColor"
+        :event-text-color="getEventTextColor"
       ></v-calendar>
     </v-sheet>
   </v-container>
 </template>
 
 <script>
-import HttpService from '@/api/HttpService'
+import HttpService from '@/api/HttpService';
+import { format, parseISO } from 'date-fns';
 
 export default {
   data: () => ({
     events: [],
     newEvent: {
       title: '',
-      startDate: new Date().toISOString().substr(0, 10),
-      endDate: new Date().toISOString().substr(0, 10),
-      content: ''
+      startDate: format(new Date(), 'yyyy-MM-dd'),
+      startTime: format(new Date(), 'HH:mm'),
+      endDate: format(new Date(), 'yyyy-MM-dd'),
+      endTime: format(new Date(), 'HH:mm'),
+      content: '',
+      color: '#1976D2' // Default color (Vuetify primary color)
     },
+    colorOptions: ['#1976D2', '#E53935', '#8E24AA', '#43A047', '#FB8C00', '#FDD835'],
     dialog: false,
+    colorPickerDialog: false,
+    startDateMenu: false,
+    startTimeMenu: false,
+    endDateMenu: false,
+    endTimeMenu: false,
     type: 'month',
     types: ['month', 'week', 'day'],
     weekday: [0, 1, 2, 3, 4, 5, 6],
@@ -71,7 +198,7 @@ export default {
       { title: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
       { title: 'Mon, Wed, Fri', value: [1, 3, 5] },
     ],
-    focus: new Date().toUTCString().substr(0, 10) // Initialize with today's date
+    focus: format(new Date(), 'yyyy-MM-dd') // Initialize with today's date
   }),
   mounted() {
     this.fetchEvents();
@@ -91,13 +218,14 @@ export default {
             }
 
             try {
-              const start = new Date(event.startDate).toUTCString();
-              const end = new Date(event.endDate).toUTCString();
+              const start = parseISO(event.startDate);
+              const end = parseISO(event.endDate);
               return {
-                name: event.name,
-                start: start,
-                end: end,
+                name: event.title,
+                start: start.toISOString(),
+                end: end.toISOString(),
                 color: event.color,
+                timed: true
               };
             } catch (error) {
               console.error('Error parsing dates:', error);
@@ -110,47 +238,79 @@ export default {
         });
     },
     addEvent() {
-      console.log('Start Date:', this.newEvent.startDate);
-      console.log('End Date:', this.newEvent.endDate);
+      this.$refs.form.validate();
+      if (this.newEvent.title && this.newEvent.startDate && this.newEvent.startTime && this.newEvent.endDate && this.newEvent.endTime) {
+        const startDateTime = `${this.newEvent.startDate}T${this.newEvent.startTime}:00`;
+        const endDateTime = `${this.newEvent.endDate}T${this.newEvent.endTime}:00`;
 
-      const newEvent = {
-        title: this.newEvent.name,
-        startDate: new Date(this.newEvent.startDate).toUTCString(),
-        endDate: new Date(this.newEvent.endDate).toUTCString(),
-        content: this.newEvent.content,
-        color: 'blue'
-      };
+        const newEvent = {
+          title: this.newEvent.title,
+          startDate: startDateTime,
+          endDate: endDateTime,
+          content: this.newEvent.content,
+          color: this.newEvent.color
+        };
 
-      console.log('Formatted Start Date:', newEvent.startDate);
-      console.log('Formatted End Date:', newEvent.endDate);
+        console.log('Formatted Start Date and Time:', newEvent.startDate);
+        console.log('Formatted End Date and Time:', newEvent.endDate);
 
-      // Add the event locally
-      this.events.push(newEvent);
-
-      // Post the new event to the server
-      HttpService.post('/api/v1/events', newEvent)
-        .then(response => {
-          console.log(newEvent)
-          console.log('Event added:', response.data);
-          this.resetForm();
-          this.closeDialog();
-        })
-        .catch(error => {
-          console.error('Error adding event:', error);
+        // Add the event locally
+        this.events.push({
+          name: newEvent.title, // Use 'name' for v-calendar
+          start: newEvent.startDate,
+          end: newEvent.endDate,
+          color: newEvent.color,
+          timed: true // For events with specific times
         });
+
+        // Post the new event to the server
+        HttpService.post('/api/v1/events', newEvent)
+          .then(response => {
+            console.log('Event added:', response.data);
+            this.resetForm();
+            this.closeDialog();
+          })
+          .catch(error => {
+            console.error('Error adding event:', error);
+          });
+      } else {
+        alert("Title, start date, start time, end date, and end time are required.");
+      }
     },
     resetForm() {
       this.newEvent.title = '';
-      this.newEvent.startDate = new Date().toUTCString().substr(0, 10);
-      this.newEvent.endDate = new Date().toUTCString().substr(0, 10);
-      this.newEvent.content = ''
+      this.newEvent.startDate = format(new Date(), 'yyyy-MM-dd');
+      this.newEvent.startTime = format(new Date(), 'HH:mm');
+      this.newEvent.endDate = format(new Date(), 'yyyy-MM-dd');
+      this.newEvent.endTime = format(new Date(), 'HH:mm');
+      this.newEvent.content = '';
+      this.newEvent.color = '#1976D2'; // Reset to default color
     },
     openAddEventDialog() {
       this.dialog = true;
     },
     closeDialog() {
       this.dialog = false;
+    },
+    openColorPicker() {
+      this.colorPickerDialog = true;
+    },
+    getEventColor(event) {
+      return event.color || '#1976D2';
+    },
+    getEventTextColor(event) {
+      return '#FFFFFF';
     }
   }
 };
 </script>
+
+<style scoped>
+.hoverable {
+  transition: all 0.2s;
+}
+
+.hoverable:hover {
+  transform: scale(1.2);
+}
+</style>

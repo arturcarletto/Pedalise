@@ -2,28 +2,9 @@ spring:
   application:
     name: Pedalise
 
-  profiles:
-    active: test
-
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:~/db;DB_CLOSE_DELAY=-1
-    username: user
-    password: password
-
   docker:
     compose:
-      file: compose.yaml
+      file: 'pedalise-backend/docker-compose.yaml'
 
 cors:
   allowed-origins:

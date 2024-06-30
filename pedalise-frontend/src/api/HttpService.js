@@ -1,5 +1,4 @@
 import Axios from "axios";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -12,7 +11,6 @@ class HttpService{
           'Content-type': 'application/json',
         },
       });
-
     }
 
     async get(endpoint) {
@@ -20,8 +18,6 @@ class HttpService{
     }
 
     async post(endpoint, data) {
-      console.log(data)
-      console.log(endpoint)
       return this.axios.post(endpoint, data);
     }
 

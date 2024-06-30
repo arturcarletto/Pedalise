@@ -24,6 +24,7 @@
 </script>
 
 <style scoped>
+
 .logo-image {
   margin-left: -30%; /* Adjust this value as needed */
 }

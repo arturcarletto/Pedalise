@@ -63,6 +63,7 @@ public class EventServiceImpl implements EventService {
         actualEvent.setEndDate(editedEvent.getEndDate());
         actualEvent.setContent(editedEvent.getContent());
         actualEvent.setTitle(editedEvent.getTitle());
+        actualEvent.setColor(editedEvent.getColor());
 
         return eventRepository.save(actualEvent);
     }
