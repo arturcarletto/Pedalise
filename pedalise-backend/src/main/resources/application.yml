@@ -5,6 +5,9 @@ spring:
   docker:
     compose:
       file: 'pedalise-backend/docker-compose.yaml'
+  jpa:
+    hibernate:
+      ddl-auto: create
 
 cors:
   allowed-origins:

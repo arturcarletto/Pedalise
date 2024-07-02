@@ -8,9 +8,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
@@ -22,6 +21,8 @@ import java.util.List;
 public class SecurityConfiguration {
 
     private final CorsProperties corsProperties;
+
+    private final JWTSecurityFilterChain jwtSecurityFilterChain;
 
     @Order(0)
     @Bean
@@ -37,12 +38,7 @@ public class SecurityConfiguration {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(request -> request.anyRequest().permitAll())
+                .addFilterBefore(jwtSecurityFilterChain, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }
