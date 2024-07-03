@@ -15,7 +15,7 @@
 
         </v-col>
         <v-spacer></v-spacer>
-        <v-col cols="3">
+        <v-col cols="auto">
           <v-row no-gutters class="justify-space-between align-center">
 
             <!-- Navigation links -->
@@ -26,41 +26,22 @@
             <v-col  cols="auto">
               <v-btn to="/agenda">Agenda</v-btn>
             </v-col>
+            <v-col>
+              <v-btn style="width: 100%"
+                     variant="flat"
+                     :prepend-icon="logged ? 'mdi-logout' : 'mdi-login'"
+                     :text="logged ? 'Logout' : 'log-in'"
+                     @click="logged ? logout() : loginIsVisible = true">
+              </v-btn>
+            </v-col>
             <v-col cols="auto">
-              <v-avatar :image="userData.userPicture" @click="drawer = !drawer"></v-avatar>
+              <v-icon icon="mdi-account"></v-icon>
             </v-col>
           </v-row>
         </v-col>
       </v-row>
     </v-container>
   </v-app-bar>
-  <v-navigation-drawer v-model="drawer" location="right">
-    <v-list-item :title="userData.username"
-                 :prepend-avatar="userData.userPicture"
-                 class="v-avatar--rounded pa-4">
-    </v-list-item>
-    <v-divider></v-divider>
-    <v-row class="pl-3 pr-3 pt-6">
-      <v-col>
-        <v-btn style="width: 100%"
-               variant="flat"
-               prepend-icon="mdi-account"
-               size="large">Minha conta
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row class="pl-3 pr-3">
-      <v-col>
-        <v-btn style="width: 100%"
-               variant="flat"
-               :prepend-icon="logged ? 'mdi-logout' : 'mdi-login'"
-               :text="logged ? 'Logout' : 'log-in'"
-               size="large"
-               @click="logged ? logout : loginIsVisible = true">
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-navigation-drawer>
   <v-dialog
     v-model="loginIsVisible"
     style="width: 500px; aspect-ratio: 2/5;">
@@ -163,12 +144,12 @@
 </template>
 
 <script setup>
-import {ref, reactive} from "vue";
+import {ref, reactive, onMounted} from "vue";
 import httpService from "@/api/HttpService";
 import authenticationService from "@/api/AuthenticationService";
+import userService from "@/api/UserService";
 
 const logged = ref(false)
-const drawer = ref(false)
 const loginIsVisible = ref(false)
 const signinIsVisible = ref(false)
 
@@ -181,9 +162,10 @@ const formData = reactive({
   confirmPasswordHide: true
 })
 
+const user = ref();
+
 const userData = reactive({
-  username: 'Gemaplys',
-  userPicture: 'https://randomuser.me/api/portraits/men/85.jpg'
+  username: 'Anonymous',
 });
 
 const emailRules = ref([
@@ -230,6 +212,7 @@ function loginSubmit() {
       .then(response => {
         console.log(response)
         userData.username = response.data.username;
+        localStorage.setItem('email', formData.email)
         logged.value = true;
       })
   }
@@ -246,14 +229,20 @@ function signinSubmit() {
 
 function logout() {
   console.log(userData)
+  logged.value = false;
+  localStorage.clear()
   clearUserData();
   authenticationService.logout();
 }
 
 function clearUserData(){
   userData.username = "Anonymous";
-  userData.userPicture = 'https://randomuser.me/api/portraits/men/85.jpg';
+  userData.userPicture = '';
 }
+
+onMounted(() =>{
+
+})
 
 </script>
 

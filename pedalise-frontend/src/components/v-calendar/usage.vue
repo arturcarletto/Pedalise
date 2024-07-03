@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-btn color="primary" @click="openAddEventDialog">Add Event</v-btn>
+    <v-btn color="primary" @click="openAddEventDialog" v-if="authenticationService().isAuthenticated()">Add Event</v-btn>
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
@@ -167,8 +167,10 @@
 </template>
 
 <script>
+import AuthenticationService from "@/api/AuthenticationService";
 import HttpService from '@/api/HttpService';
 import { format, parseISO } from 'date-fns';
+import authenticationService from "@/api/AuthenticationService";
 
 export default {
   data: () => ({
@@ -204,6 +206,9 @@ export default {
     this.fetchEvents();
   },
   methods: {
+    authenticationService() {
+      return authenticationService
+    },
     fetchEvents() {
       HttpService.get('http://localhost:8080/api/v1/events')
         .then(response => {
