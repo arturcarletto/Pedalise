@@ -4,7 +4,6 @@ import br.com.pedalise.pedalisebackend.event.entity.Event;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 

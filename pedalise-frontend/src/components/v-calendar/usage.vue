@@ -153,7 +153,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-sheet :style="{backgroundImage: backgroundGradient}">
+    <v-sheet>
       <v-calendar
         ref="calendar"
         v-model:focus="focus"

@@ -223,10 +223,13 @@ function loginSubmit() {
   if (authenticationService.authenticate(formData.email, formData.password)) {
     httpService.get(`api/v1/users/email/${formData.email}`)
       .then(response => {
-        console.log(response)
-        userData.username = response.data.username;
-        localStorage.setItem('email', formData.email)
-        userService.setLogged(true)
+        if (response.data !== "") {
+          console.log(response)
+          userData.username = response.data.username;
+          localStorage.setItem('email', formData.email)
+          userService.setLogged(true)
+          loginIsVisible.value = false;
+        }
       })
   }
 }
@@ -239,6 +242,7 @@ function signinSubmit() {
     password: formData.password
   }).then(() => {
     loginSubmit()
+    signinIsVisible.value = false;
   })
 }
 
@@ -256,10 +260,10 @@ function clearUserData() {
   userData.userPicture = '';
 }
 
-function clearForms(){
+function clearForms() {
   formData.username = ''
   formData.email = ''
-  formData.password =''
+  formData.password = ''
   formData.confirmPassword = ''
   formData.passwordHide = true
   formData.confirmPasswordHide = true
@@ -269,11 +273,11 @@ onMounted(() => {
   let email = localStorage.getItem('email');
   httpService.get(`api/v1/users/email/${email}`)
     .then(response => {
-      if(response.data !== ''){
+      if (response.data !== '') {
         console.log(response)
         userData.username = response.data.username;
         userService.setLogged(true)
-      }else{
+      } else {
         userService.setLogged(false);
         clearUserData()
       }
@@ -284,7 +288,4 @@ onMounted(() => {
 
 <style scoped>
 
-.logo-image {
-
-}
 </style>
