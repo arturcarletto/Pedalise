@@ -1,14 +1,15 @@
 <template>
-  <v-container>
-    <v-btn color="primary" @click="openAddEventDialog" v-if="authenticationService().isAuthenticated()">Add Event</v-btn>
+  <v-container style="width: 100%; height: 100%; max-width: 100%" class="ma-0">
+    <v-btn color="primary" @click="openAddEventDialog" v-if="userService().checkIfIsLogged()">Add Event</v-btn>
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
-        <v-card-title>
+        <v-card-title class="text-center">
           <span class="text-h5">Add New Event</span>
         </v-card-title>
         <v-card-text>
           <v-form ref="form">
-            <v-text-field v-model="newEvent.title" label="Event title" outlined :rules="[v => !!v || 'Title is required']"></v-text-field>
+            <v-text-field v-model="newEvent.title" label="Event title" outlined
+                          :rules="[v => !!v || 'Title is required']"></v-text-field>
             <v-row>
               <v-col>
                 <v-menu
@@ -18,11 +19,11 @@
                   transition="scale-transition"
                   offset-y
                 >
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ attrs }">
                     <v-text-field
                       v-model="newEvent.startDate"
                       label="Start Date"
-                      prepend-icon="mdi-calendar"
+                      prepend-inner-icon="mdi-calendar"
                       readonly
                       outlined
                       v-bind="attrs"
@@ -40,11 +41,11 @@
                   transition="scale-transition"
                   offset-y
                 >
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ attrs }">
                     <v-text-field
                       v-model="newEvent.startTime"
                       label="Start Time"
-                      prepend-icon="mdi-clock"
+                      prepend-inner-icon="mdi-clock"
                       readonly
                       outlined
                       v-bind="attrs"
@@ -64,11 +65,11 @@
                   transition="scale-transition"
                   offset-y
                 >
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ attrs }">
                     <v-text-field
                       v-model="newEvent.endDate"
                       label="End Date"
-                      prepend-icon="mdi-calendar"
+                      prepend-inner-icon="mdi-calendar"
                       readonly
                       outlined
                       v-bind="attrs"
@@ -86,11 +87,11 @@
                   transition="scale-transition"
                   offset-y
                 >
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ attrs }">
                     <v-text-field
                       v-model="newEvent.endTime"
                       label="End Time"
-                      prepend-icon="mdi-clock"
+                      prepend-inner-icon="mdi-clock"
                       readonly
                       outlined
                       v-bind="attrs"
@@ -152,7 +153,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-sheet>
+    <v-sheet :style="{backgroundImage: backgroundGradient}">
       <v-calendar
         ref="calendar"
         v-model:focus="focus"
@@ -167,10 +168,10 @@
 </template>
 
 <script>
-import AuthenticationService from "@/api/AuthenticationService";
 import HttpService from '@/api/HttpService';
-import { format, parseISO } from 'date-fns';
+import {format, parseISO} from 'date-fns';
 import authenticationService from "@/api/AuthenticationService";
+import userService from "@/api/UserService";
 
 export default {
   data: () => ({
@@ -195,10 +196,10 @@ export default {
     types: ['month', 'week', 'day'],
     weekday: [0, 1, 2, 3, 4, 5, 6],
     weekdays: [
-      { title: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6] },
-      { title: 'Mon - Sun', value: [1, 2, 3, 4, 5, 6, 0] },
-      { title: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
-      { title: 'Mon, Wed, Fri', value: [1, 3, 5] },
+      {title: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6]},
+      {title: 'Mon - Sun', value: [1, 2, 3, 4, 5, 6, 0]},
+      {title: 'Mon - Fri', value: [1, 2, 3, 4, 5]},
+      {title: 'Mon, Wed, Fri', value: [1, 3, 5]},
     ],
     focus: format(new Date(), 'yyyy-MM-dd') // Initialize with today's date
   }),
@@ -206,6 +207,9 @@ export default {
     this.fetchEvents();
   },
   methods: {
+    userService() {
+      return userService
+    },
     authenticationService() {
       return authenticationService
     },

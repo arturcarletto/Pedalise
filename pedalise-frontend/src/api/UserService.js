@@ -1,19 +1,18 @@
-import httpService from "@/api/HttpService";
+import {reactive} from "vue";
+
+let userStatus = reactive({
+  logged: false
+});
 
 class UserService{
 
-  async fetchUser() {
-    var email = localStorage.getItem('email')
-    return httpService.get(`api/v1/users/email/${email}`)
-      .then(response => {
-        return response.data;
-      })
-      .catch(reason => {
-        console.error(reason)
-        return undefined;
-      })
+  checkIfIsLogged(){
+    return userStatus.logged;
   }
 
+  setLogged(value){
+    userStatus.logged = value;
+  }
 }
 
 export default new UserService()
